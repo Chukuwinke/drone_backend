@@ -1,22 +1,33 @@
 import socketio
 
 class SocketDroneToserver:
-    def __init__(self, url, header={}):
+    def __init__(self, url, header, drone):
         self.sio = socketio.Client()
         self.url = url
         self.header = header
+        self.drone = drone
     
     def connectToServer(self):
-        self.sio.connect(self.url, self.header)
-        self.sio.wait()
+        self.events()
+        self.sio.connect(self.url, auth=self.header)
 
     
-    def connect(self):
-        if self.sio.connected():
-            print("connected")
-    
     def events(self):
+        @self.sio.event
+        def connect():
+            print("connected")
+            self.drone.get_drone_data(self.sio)
         
-        self.connect()
+        @self.sio.event
+        def disconnect():
+            print("disconnected")
+        
+        
+    def loop(self):
+        self.sio.wait()
+
+    def start(self):
+        self.connectToServer()
+        self.loop()
         
 

@@ -12,21 +12,22 @@ class Connect:
 
         print(f"Heart beat from system {self.target_sys}, component {self.target_comp}")
 
-    def get_drone_data(self):
+    def get_drone_data(self, sio):
         '''
         Retreive telemetery data from drone and send to server
         '''
         while 1:
             msg = self.master.recv_match(type='ATTITUDE', blocking=True)
             data =msg.to_dict()
-            print(type(data))
-            #jData = json.dumps(data)
+            #print(data)
+            jData = json.dumps(data)
+            sio.emit('data', jData)
             #print(jData)
 
 
-drone = Connect('udpin:localhost:14551')
+# drone = Connect('udpin:localhost:14551')
 
-drone.get_drone_data()
+#drone.get_drone_data()
 # sio = socketio.Client()
 
 

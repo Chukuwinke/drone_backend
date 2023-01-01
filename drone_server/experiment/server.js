@@ -1,7 +1,7 @@
 const io = require("socket.io")(3000)
 
 io.on('connection', socket =>{
-    //console.log(socket)
+    console.log(socket.id)
     socket.on("data", (args) =>{
         console.log(args)
     })
