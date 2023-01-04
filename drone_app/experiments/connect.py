@@ -23,6 +23,25 @@ class Connect:
             jData = json.dumps(data)
             sio.emit('data', jData)
             #print(jData)
+    
+    def takeoff(self):
+        #arm command
+        self.master.mav.command_long_send(self.master.target_system, self.master.target_component,
+                                     mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM, 0, 1, 0, 0, 0, 0, 0, 0)
+        msg = self.master.recv_match(type='COMMAND_ACK', blocking=True)
+        print(msg)
+
+        #takeoff command
+        self.master.mav.command_long_send(self.master.target_system, self.master.target_component,
+                                            mavutil.mavlink.MAV_CMD_NAV_TAKEOFF, 0, 0, 0, 0, 0, 0, 0, 10)
+        msg = self.master.recv_match(type='COMMAND_ACK', blocking=True)
+        print(msg)
+
+    def land(self):
+        #land drone
+        self.master.mav.command_long_send(self.master.target_system, self.master.target_component,
+                                            mavutil.mavlink.MAV_CMD_NAV_LAND, 0,0,0,0,0,0,0,0)
+        msg = self.master.recv_match(type="COMMAND_ACK", blocking=True)
 
 
 # drone = Connect('udpin:localhost:14551')

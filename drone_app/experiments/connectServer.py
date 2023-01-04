@@ -22,6 +22,11 @@ class SocketDroneToserver:
         def disconnect():
             print("disconnected")
         
+        @self.sio.event
+        def takeoffcommand(args):
+            print("triggered")
+            self.drone.takeoff()
+        
         
     def loop(self):
         self.sio.wait()
