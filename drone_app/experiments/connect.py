@@ -9,6 +9,7 @@ class Connect:
         self.master.wait_heartbeat()
         self.target_sys = self.master.target_system
         self.target_comp = self.master.target_component
+        self.armed = False
 
         print(f"Heart beat from system {self.target_sys}, component {self.target_comp}")
 
@@ -23,13 +24,23 @@ class Connect:
             jData = json.dumps(data)
             sio.emit('data', jData)
             #print(jData)
-    
-    def takeoff(self):
-        #arm command
-        self.master.mav.command_long_send(self.master.target_system, self.master.target_component,
+
+    def armToggle(self):
+        if self.armed:
+            #arm command
+            self.master.mav.command_long_send(self.master.target_system, self.master.target_component,
+                                                mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM, 0, 0, 0, 0, 0, 0, 0, 0)
+            self.armed = False
+        else:
+            #arm command
+            self.master.mav.command_long_send(self.master.target_system, self.master.target_component,
                                      mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM, 0, 1, 0, 0, 0, 0, 0, 0)
+            self.armed = True
+            
         msg = self.master.recv_match(type='COMMAND_ACK', blocking=True)
         print(msg)
+
+    def takeoff(self):
 
         #takeoff command
         self.master.mav.command_long_send(self.master.target_system, self.master.target_component,

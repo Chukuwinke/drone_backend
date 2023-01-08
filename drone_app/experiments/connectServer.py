@@ -25,7 +25,8 @@ class SocketDroneToserver:
         @self.sio.event
         def takeoffcommand(args):
             print("triggered")
-            self.drone.takeoff()
+            #self.drone.takeoff()
+            self.drone.armToggle()
         
         
     def loop(self):
