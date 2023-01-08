@@ -23,10 +23,22 @@ class SocketDroneToserver:
             print("disconnected")
         
         @self.sio.event
-        def takeoffcommand(args):
-            print("triggered")
+        def takeoffCommand(args):
+            print("takeoff triggered")
+            self.drone.takeoff()
+            #self.drone.armToggle()
+        
+        @self.sio.event
+        def toggleArmCommand(args):
+            print("toggle triggered")
             #self.drone.takeoff()
             self.drone.armToggle()
+        
+        @self.sio.event
+        def modeCommand(args):
+            print("mode triggered")
+            #self.drone.takeoff()
+            self.drone.setMode()
         
         
     def loop(self):

@@ -24,8 +24,16 @@ io.on('connection', socket =>{
     })
     
     socket.on("takeoff", (args)=>{
-        io.emit('takeoffcommand', "takeoff")
+        io.emit('takeoffCommand', "takeoff")
         console.log(args)
+    })
+
+    socket.on("setMode", ()=>{
+        io.emit('modeCommand', "modeset")
+    })
+
+    socket.on("toggleArm", ()=>{
+        io.emit('toggleArmCommand', "armDisarm")
     })
 })
 

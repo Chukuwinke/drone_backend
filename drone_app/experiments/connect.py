@@ -10,6 +10,7 @@ class Connect:
         self.target_sys = self.master.target_system
         self.target_comp = self.master.target_component
         self.armed = False
+        self.mode = 'GUIDED'
 
         print(f"Heart beat from system {self.target_sys}, component {self.target_comp}")
 
@@ -30,15 +31,27 @@ class Connect:
             #arm command
             self.master.mav.command_long_send(self.master.target_system, self.master.target_component,
                                                 mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM, 0, 0, 0, 0, 0, 0, 0, 0)
+            
+            self.master.motors_disarmed_wait()
             self.armed = False
         else:
             #arm command
             self.master.mav.command_long_send(self.master.target_system, self.master.target_component,
                                      mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM, 0, 1, 0, 0, 0, 0, 0, 0)
+            # wait for the vehicle to be armed
+            self.master.motors_armed_wait()
             self.armed = True
             
         msg = self.master.recv_match(type='COMMAND_ACK', blocking=True)
         print(msg)
+    
+    # setting the vehicle mode
+    def setMode(self):
+        mode_ID = self.master.mode_mapping()[self.mode]
+        self.master.mav.set_mode_send(self.master.target_system, 
+                                        mavutil.mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,
+                                        mode_ID)
+
 
     def takeoff(self):
 
