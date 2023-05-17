@@ -1,0 +1,27 @@
+{
+  "name": "drone_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "all": "npm-run-all --parallel drone-client drone-server drone-app-script",
+    "drone-client": "cd drone_client && npm run dev",
+    "drone-server": "cd drone_server && npm run devStart",
+    "drone-app-script": "node -e \"require('child_process').execFileSync('python', ['./drone_app/experiments/app.py'], {stdio:[0,1,2]});\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chukuwinke/drone_backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Chukuwinke/drone_backend/issues"
+  },
+  "homepage": "https://github.com/Chukuwinke/drone_backend#readme",
+  "dependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}

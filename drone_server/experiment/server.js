@@ -10,16 +10,14 @@
  const io = require('socket.io')(server, {cors:'*'});
 
 
-
-
 //const io = require("socket.io")(3000, {cors:'*'})
 
 io.on('connection', socket =>{
-    console.log(socket.id)
+    console.log(socket.handshake)
     //sendData(socket)
     socket.on('data', (args) =>{
         //console.log(args)
-        //io.emit('telem', args)
+        io.emit('telem', args)
         
     })
     
@@ -38,6 +36,6 @@ io.on('connection', socket =>{
 })
 
  const sendData =(socket)=>{
-     //console.log(socket)
+     console.log(socket)
      socket.emit('telem', "args")
  }
