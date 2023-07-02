@@ -24,6 +24,7 @@ model Mission{
   slug        String
   description String
   missionType String
+  missionConn String
   pilot       User @relation(fields: [pilotId], references: [id])
   pilotId     String @db.ObjectId
 

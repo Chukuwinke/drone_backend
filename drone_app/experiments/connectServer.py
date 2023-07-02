@@ -7,10 +7,20 @@ class SocketDroneToserver:
         self.header = header
         self.drone = drone
     
-    def connectToServer(self):
+    def on_join_room(self, response):
+        if response == 'success':
+            print('Join room successful')
+            self.start()  # Start the loop after successful room join
+        else:
+            print('Join room failed')
+    
+
+    def connectToServer(self, missionKey):
         self.events()
         self.sio.connect(self.url, auth=self.header)
-
+        self.sio.emit('join_room', missionKey, callback=self.on_join_room)  # Join the specified room
+        
+    
     
     def events(self):
         @self.sio.event
@@ -21,7 +31,7 @@ class SocketDroneToserver:
         @self.sio.event
         def disconnect():
             print("disconnected")
-        
+        #
         @self.sio.event
         def takeoffCommand(args):
             print("takeoff triggered")
@@ -45,7 +55,7 @@ class SocketDroneToserver:
         self.sio.wait()
 
     def start(self):
-        self.connectToServer()
+        #self.connectToServer(missionKey)
         self.loop()
         
 

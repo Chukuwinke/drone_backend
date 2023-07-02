@@ -32,15 +32,15 @@ const availableDrones = {
 const joinSystems = (io) => {
 
     io.on('connection', socket =>{
-        console.log("socket.id")
+        console.log("join system active!!")
         //sendData(socket)
 
         // Perform authentication checks
-        if (!authenticateUser(socket)) {
-            // Authentication failed
-            socket.disconnect(true);
-            return;
-        }
+        // if (!authenticateUser(socket)) {
+        //     // Authentication failed
+        //     socket.disconnect(true);
+        //     return;
+        // }
 
         // Join two clients in a room
         socket.on('joinRoom', (room) => {
@@ -71,7 +71,30 @@ const joinSystems = (io) => {
         socket.on("toggleArm", ()=>{
             io.emit('toggleArmCommand', "armDisarm")
         })
-    })
+    });
+
+
+
+    // Handle reconnect events
+    // io.on('reconnect', () => {
+    //     console.log('Reconnected to the server');
+    //     // Perform any necessary actions after successful reconnection
+    // });
+
+    // io.on('reconnect_attempt', (attemptNumber) => {
+    //     console.log(`Attempting to reconnect (${attemptNumber})...`);
+    //     // Perform any necessary actions before each reconnection attempt
+    // });
+
+    // io.on('reconnect_error', (error) => {
+    //     console.log('Reconnection error:', error);
+    //     // Perform any necessary actions when a reconnection error occurs
+    // });
+
+    // io.on('reconnect_failed', () => {
+    //     console.log('Failed to reconnect to the server');
+    //     // Perform any necessary actions when reconnection attempts fail
+    // });
 }
 
 const socketManger = (server) => {

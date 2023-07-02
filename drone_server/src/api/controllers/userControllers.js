@@ -1,32 +1,38 @@
 // bring in prisma and cookie
-
-const prisma = require('../../../prisma/index');
 const cookieToken = require('../../utils/cookieToken');
-
+const credentialCheck = require('../services/signupService');
+const loginCheck = require('../services/loginService')
 
 exports.signUp = async(req, res, next) => {
+    const {name, email, password, callSign} = req.body;
     try {
-        const {name, email, password, callSign} = req.body;
-
-        //check request
-        if (!name || !email || !password || !callSign){
-            throw new Error('one field is missing');
-        }
-        // Remember to create and call the service to generate a call sign here
-        // and add it to the create user
-
-        // create new user
-        const user = await prisma.user.create({
-            data: {
-                name,
-                email,
-                password,
-                callSign
-            }
-        })
-
+        
+        const user = await credentialCheck(name, email, password, callSign)
+        
         cookieToken(user, res);
     } catch (error) {
         throw new Error(error);
+    }
+}
+
+exports.login = async(req, res, next) =>{
+    const {email, password} = req.body;
+    try {
+        const user = await loginCheck(email, password);
+        cookieToken(user, res)
+        
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+exports.logout = async(req, res, next) => {
+    try {
+        res.clearCookie('token')
+        res.json({
+            success: true
+        })
+    } catch (error) {
+        throw new Error(error)
     }
 }
