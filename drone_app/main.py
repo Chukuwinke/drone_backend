@@ -20,7 +20,7 @@ def runDrone(missionKey):
 def read_root(item:Item):
     
     print("woooooo!!!",item.missionKey)
-    #runDrone(item.missionKey)
+    runDrone(item.missionKey)
     return {"?q=example"}
 
 # @app.post("/api/bind")

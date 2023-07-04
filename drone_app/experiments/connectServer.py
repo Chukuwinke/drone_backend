@@ -18,7 +18,8 @@ class SocketDroneToserver:
     def connectToServer(self, missionKey):
         self.events()
         self.sio.connect(self.url, auth=self.header)
-        self.sio.emit('join_room', missionKey, callback=self.on_join_room)  # Join the specified room
+        self.sio.emit('joinRoom', missionKey, callback=self.on_join_room)  # Join the specified room
+        print(self.sio)
         
     
     

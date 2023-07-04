@@ -44,7 +44,9 @@ const joinSystems = (io) => {
 
         // Join two clients in a room
         socket.on('joinRoom', (room) => {
+            console.log("lisitner working");
             socket.join(room);
+            console.log(`Socket ${socket.id} joined room: ${room}`);
         });
         
         socket.on('privateMessage', (data) => {
