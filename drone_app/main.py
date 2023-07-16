@@ -20,6 +20,7 @@ def runDrone(missionKey):
 def read_root(item:Item):
     
     print("woooooo!!!",item.missionKey)
+    # FIGURE OUT HOW TO RUN DRONE SUCESSFUL LAUNCH CHECK BEFORE RETURNING REPLY (try catch)
     runDrone(item.missionKey)
     return {"?q=example"}
 
