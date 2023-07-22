@@ -7,9 +7,6 @@
  */
 
 
-// let dummyClientOnline = false;
-// let dummyDroneOnline = false;
-
 const availableDrones = {
     drone1: {
         callSign: "alpha123",
@@ -28,11 +25,12 @@ const availableDrones = {
         available:true
     },
 }
+const maxSocketsPerRoom = 2;
 
+// Function to create proxy between to sockets 
 const joinSystems = (io) => {
-
     io.on('connection', socket =>{
-        console.log("join system active!!")
+        console.log("join system active!! ", socket.id)
         //sendData(socket)
 
         // Perform authentication checks
@@ -42,19 +40,43 @@ const joinSystems = (io) => {
         //     return;
         // }
 
+        // Function to check the number of sockets in the room
+        const getSocketsjoined = (room) =>{
+            return io.sockets.adapter.rooms.get(room)?.size || 0;
+        }
+
         // Join two clients in a room
         socket.on('joinRoom', (room) => {
             console.log("lisitner working");
-            socket.join(room);
-            console.log(`Socket ${socket.id} joined room: ${room}`);
+            const socketAmount = getSocketsjoined(room);
+            if (socketAmount < maxSocketsPerRoom){
+                socket.join(room);
+                console.log(`Socket ${socket.id} joined room: ${room}`);
+            }           
         });
+
+        // Remove the socket from all rooms it has joined
+        socket.on('disconnect', () => {
+            console.log(`Socket ${socket.id} disconnected.`);
+            socket.rooms.forEach((room) => {
+              if (room !== socket.id) {
+                socket.leave(room, (err) => {
+                  if (err) {
+                    console.error(`Error removing socket ${socket.id} from room ${room}:`, err);
+                  } else {
+                    console.log(`Socket ${socket.id} removed from room ${room}.`);
+                  }
+                });
+              }
+            });
+          });
         
         socket.on('privateMessage', (data) => {
             const { recipient, message } = data;
             io.to(recipient).emit('message', message);
         });
 
-        
+        // INCOMPLETE! listeners for comunication with drone to user and vice versa
         socket.on('data', (args) =>{
             //console.log(args)
             io.emit('telem', args)
@@ -73,30 +95,9 @@ const joinSystems = (io) => {
         socket.on("toggleArm", ()=>{
             io.emit('toggleArmCommand', "armDisarm")
         })
+        // INCOMPLETE!
     });
 
-
-
-    // Handle reconnect events
-    // io.on('reconnect', () => {
-    //     console.log('Reconnected to the server');
-    //     // Perform any necessary actions after successful reconnection
-    // });
-
-    // io.on('reconnect_attempt', (attemptNumber) => {
-    //     console.log(`Attempting to reconnect (${attemptNumber})...`);
-    //     // Perform any necessary actions before each reconnection attempt
-    // });
-
-    // io.on('reconnect_error', (error) => {
-    //     console.log('Reconnection error:', error);
-    //     // Perform any necessary actions when a reconnection error occurs
-    // });
-
-    // io.on('reconnect_failed', () => {
-    //     console.log('Failed to reconnect to the server');
-    //     // Perform any necessary actions when reconnection attempts fail
-    // });
 }
 
 const socketManger = (server) => {

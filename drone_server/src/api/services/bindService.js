@@ -1,6 +1,7 @@
 // Create bind service to handle connection between drone and user
 const { createProxyMiddleware } = require('http-proxy-middleware')
 
+// Function to intercept and transform request and response data to fit recievers 
 const bindPilotAndDrone = async(target, req, res) => {
 
     console.log(target)
@@ -20,14 +21,14 @@ const bindPilotAndDrone = async(target, req, res) => {
         // Intercept the response from the drone server
         onProxyRes: async (proxyRes, req, res) => {
             // Modify the response if needed
-            // For example, you can log the response data
+            // For example, reconstruct the response data
             let responseData = '';
             proxyRes.on('data', (chunk) => {
               responseData += chunk;
             });
   
             proxyRes.on('end', () => {
-              // Do something with the response data if required
+              // The data can be transformed here and written to res
               
               console.log(responseData);
             });
