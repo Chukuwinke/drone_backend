@@ -1,6 +1,5 @@
 droneEnv/
 drone-client-test/
-drone_client/
 node_modules/
 # Logs
 logs
