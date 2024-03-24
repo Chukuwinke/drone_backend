@@ -10,10 +10,10 @@ class SocketDroneToserver:
     
     def on_join_room(self, response):
         if response == 'success':
-            print('Join room successful')
+            print('Drone Joined room successful')
             self.start()  # Start the loop after successful room join
         else:
-            print('Join room failed')
+            print('Drone Joining room failed')
     
 
     def connectToServer(self, missionKey):
