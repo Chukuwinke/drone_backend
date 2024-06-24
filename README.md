@@ -8,5 +8,6 @@ this project showcases the following:
 * express.js node server that proxies request from frontend to drone instance
 * drone application that recieves proxied request from frontend and launches instance
 * command are then communicated through sockets (Socket.IO) library
+* can run with ardupilot and px4 firmwares
 
 
