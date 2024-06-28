@@ -9,10 +9,11 @@ def create_app():
 
     # # Include any global app-level configurations here
     configure_app(app)
-
+    
     # # Import and include route definitions here
     from app.routes import router as routes_router
     app.include_router(routes_router)
+    print(app)
     # from .routes import router
     # app.include_router(router)
 
